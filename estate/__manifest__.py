@@ -5,8 +5,12 @@
     "license": "LGPL-3",
     "depends": ["base"],
     "data": [
-        #    'security/security.xml',
+        # Model data
+        # Security,
         "security/ir.model.access.csv",
+        # Views
+        "views/estate_actions.xml",
+        "views/estate_menus.xml",
         "views/estate_property_views.xml",
     ],
     "application": True,
