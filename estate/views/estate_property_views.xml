@@ -43,10 +43,12 @@
                   
                         </group>
                         <group string="Building Specifications">
-                            <field name="floor_area"/>
                             <field name="bedrooms"/>
-                            <field name="has_garden"/>
                             <field name="has_garage"/>
+                            <field name="floor_area"/>
+                            <field name="has_garden"/>
+                            <field name="garden_area"/>
+                            <field name="total_area"/>
                             <field
                                 name="tag_ids"
                                 widget="many2many_tags"
@@ -62,8 +64,7 @@
                             />
                         </page>
                         <page string="Offers">
-                      <!-- <field name="offer_ids"/>
-                      -->
+                           <field name="offer_ids"/>
                         </page>
                         <page string="Other Info">
                             <group>

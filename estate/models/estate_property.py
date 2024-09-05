@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import fields, models, api
 from odoo.tools import date_utils
 
 
@@ -51,8 +51,8 @@ class EstateProperty(models.Model):
     bedrooms = fields.Integer("Number of Bedrooms", default=2)
     floor_area = fields.Integer("House Floor Area", required=False)
     facades = fields.Integer("Number of Facade", required=False)
-    has_garage = fields.Boolean("Garage Included", required=False)
-    has_garden = fields.Boolean("Garden Included", required=False)
+    has_garage = fields.Boolean("Garage Included", default=False, required=False)
+    has_garden = fields.Boolean("Garden Included", default=False, required=False)
     garden_area = fields.Integer("Garden Area", required=False)
     garden_orientation = fields.Selection(
         string="Orientation",
@@ -64,6 +64,7 @@ class EstateProperty(models.Model):
             ("west", "West"),
         ],
     )
+    total_area = fields.Integer("Total Area", compute="_compute_total_area")
     buyer_id = fields.Many2one(string="Buyer", comodel_name='res.partner')
     salesperson_id = fields.Many2one(
         string="Salesperson", 
@@ -76,3 +77,13 @@ class EstateProperty(models.Model):
         inverse_name='property_id',
     )
     tag_ids = fields.Many2many(string="Tags", comodel_name='estate.tag')
+
+    # Computed Fields - start
+    total_area = fields.Integer(compute="_compute_total_area")
+    # Computed Fields - end
+
+    # Computed fields private methods - start
+    @api.depends("floor_area", "has_garden", "garden_area")
+    def _compute_total_area(self):
+        self.total_area = self.floor_area + (self.garden_area if self.has_garden else 0)
+    # Computed fields private methods - end
