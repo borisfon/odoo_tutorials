@@ -27,8 +27,7 @@
                     <field name="state" widget="statusbar" options="{'clickable': True}"/>
                 </header>
                 <sheet>
-          <!-- <field name="image" widget="image" class="oe_avatar"/>
-            -->
+                    <field name="image" widget="image" class="oe_avatar"/>
                     <div class="oe_title">
                         <label for="name" string="Property Name"/>
                         <h1>
@@ -37,8 +36,7 @@
                     </div>
                     <group>
                         <group string="Listing Information">
-                    <!--    <field name="type_id"/>
-                    -->
+                            <field name="type_id"/>
                             <field name="selling_price"/>
                             <field name="availability_date"/>
                             <field name="active"/>
@@ -49,12 +47,11 @@
                             <field name="bedrooms"/>
                             <field name="has_garden"/>
                             <field name="has_garage"/>
-                        <!-- <field
+                            <field
                                 name="tag_ids"
                                 widget="many2many_tags"
                                 options="{'color_field': 'color', 'no_quick_create': True, 'no_create_edit': True}"
                             />
-                        -->
                         </group>
                     </group>
                     <notebook>
@@ -71,15 +68,52 @@
                         <page string="Other Info">
                             <group>
                                 <group>
-                                <!-- <field name="seller_id"/>
+                                    <field name="buyer_id"/>
                                     <field name="salesperson_id"/>
-                                -->
                                 </group>
                             </group>
                         </page>
                     </notebook>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+
+    <record id="estate.property_search" model="ir.ui.view">
+        <field name="name">Property Search</field>
+        <field name="model">estate.property</field>
+        <field name="arch" type="xml">
+            <search>
+                <!-- Fields -->
+                <field name="name"/>
+                <field
+                    name="description"
+                    filter_domain="['|', ('name', 'ilike', self), ('description', 'ilike', self)]"
+                />
+                <field name="selling_price" string="Maximum Price" operator="&lt;="/>
+                <field name="floor_area" string="Minimum Floor Area" operator="&gt;="/>
+                <field name="bedrooms" string="Minimum Bedrooms" operator="&gt;="/>
+
+                <!-- Filters -->
+                <filter
+                    name="filter_for_sale"
+                    string="For Sale"
+                    domain="[('state', 'in', ['new', 'offer_received'])]"
+                />
+                <separator/>
+                <filter name="filter_availability" date="availability_date"/>
+                <separator/>
+                <filter name="filter_garden" string="Garden" domain="[('has_garden', '=', True)]"/>
+                <filter name="filter_garage" string="Garage" domain="[('has_garage', '=', True)]"/>
+                <separator/>
+                <filter name="filter_inactive" string="Archived" domain="[('active', '=', False)]"/>
+
+                <!-- Group by -->
+                <filter name="group_by_state" context="{'group_by': 'state'}"/>
+        <!-- <filter name="group_by_type" context="{'group_by': 'type_id'}"/>
+          -->
+            </search>
         </field>
     </record>
 
