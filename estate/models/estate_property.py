@@ -65,7 +65,7 @@ class EstateProperty(models.Model):
         ],
     )
     total_area = fields.Integer("Total Area", compute="_compute_total_area")
-    buyer_id = fields.Many2one(string="Buyer", comodel_name="res.partner")
+    buyer_id = fields.Many2one(string="Buyer", comodel_name="res.partner", copy=False)
     salesperson_id = fields.Many2one(
         string="Salesperson",
         comodel_name="res.users",
