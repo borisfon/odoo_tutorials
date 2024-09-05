@@ -85,5 +85,6 @@ class EstateProperty(models.Model):
     # Computed fields private methods - start
     @api.depends("floor_area", "has_garden", "garden_area")
     def _compute_total_area(self):
-        self.total_area = self.floor_area + (self.garden_area if self.has_garden else 0)
+        for record in self:
+            record.total_area = record.floor_area + (record.garden_area if record.has_garden else 0)
     # Computed fields private methods - end
