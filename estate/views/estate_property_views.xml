@@ -38,9 +38,9 @@
                         <group string="Listing Information">
                             <field name="type_id"/>
                             <field name="selling_price"/>
+                            <field name="best_price"/>
                             <field name="availability_date"/>
                             <field name="active"/>
-                  
                         </group>
                         <group string="Building Specifications">
                             <field name="bedrooms"/>

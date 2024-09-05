@@ -42,10 +42,10 @@ class EstateProperty(models.Model):
         required=True,
     )
     selling_price = fields.Float(
-        "Selling Price", 
-        required=True, 
-        default=300000.00, 
-        readonly=True, 
+        "Selling Price",
+        required=True,
+        default=300000.00,
+        readonly=True,
         copy=False,
     )
     bedrooms = fields.Integer("Number of Bedrooms", default=2)
@@ -65,26 +65,40 @@ class EstateProperty(models.Model):
         ],
     )
     total_area = fields.Integer("Total Area", compute="_compute_total_area")
-    buyer_id = fields.Many2one(string="Buyer", comodel_name='res.partner')
+    buyer_id = fields.Many2one(string="Buyer", comodel_name="res.partner")
     salesperson_id = fields.Many2one(
-        string="Salesperson", 
-        comodel_name='res.users', 
-        default=lambda self: self.env.uid
+        string="Salesperson",
+        comodel_name="res.users",
+        default=lambda self: self.env.uid,
     )
     offer_ids = fields.One2many(
-        string="Offers", 
-        comodel_name='estate.offer', 
-        inverse_name='property_id',
+        string="Offers",
+        comodel_name="estate.offer",
+        inverse_name="property_id",
     )
-    tag_ids = fields.Many2many(string="Tags", comodel_name='estate.tag')
+    tag_ids = fields.Many2many(string="Tags", comodel_name="estate.tag")
 
     # Computed Fields - start
     total_area = fields.Integer(compute="_compute_total_area")
+
+    best_price = fields.Float(compute="_compute_best_price")
     # Computed Fields - end
 
     # Computed fields private methods - start
     @api.depends("floor_area", "has_garden", "garden_area")
     def _compute_total_area(self):
         for record in self:
-            record.total_area = record.floor_area + (record.garden_area if record.has_garden else 0)
+            record.total_area = record.floor_area + (
+                record.garden_area if record.has_garden else 0
+            )
+
+    @api.depends("offer_ids.amount")
+    def _compute_best_price(self):
+        best = 0
+        for offer in self.offer_ids:
+            price = offer.amount
+            if price > best:
+                best = price
+        self.best_price = best
+
     # Computed fields private methods - end
