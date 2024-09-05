@@ -64,7 +64,10 @@
                             />
                         </page>
                         <page string="Offers">
-                           <field name="offer_ids"/>
+                            <field
+                                name="offer_ids"
+                                widget="one2many"
+                            />
                         </page>
                         <page string="Other Info">
                             <group>

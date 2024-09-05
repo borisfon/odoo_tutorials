@@ -8,8 +8,9 @@
             <tree>
                 <field name="amount"/>
                 <field name="buyer_id"/>
-                <field name="date"/>
+                <field name="create_date"/>
                 <field name="validity"/>
+                <field name="deadline_date"/>
                 <field name="state"/>
             </tree>
         </field>
@@ -28,8 +29,9 @@
                             <field name="state"/>
                         </group>
                         <group>
-                            <field name="date"/>
+                            <field name="create_date"/>
                             <field name="validity"/>
+                            <field name="deadline_date"/>
                         </group>
                     </group>
                 </sheet>
