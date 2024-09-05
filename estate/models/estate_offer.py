@@ -11,7 +11,7 @@ class RealEstateOffer(models.Model):
         string="Buyer", comodel_name="res.partner", required=True
     )
     create_date = fields.Date(
-        string="Create Date", required=True, default=fields.Date.today()
+        string="Create Date", required=True, default=fields.Date.today(), readonly=True
     )
     validity = fields.Integer(
         string="Validity",
@@ -39,6 +39,7 @@ class RealEstateOffer(models.Model):
     deadline_date = fields.Date(
         string="Deadline Date",
         compute="_compute_deadline_date",
+        inverse="_inverse_deadline_date",
         default=date_utils.add(fields.Date.today(), days=7),
     )
     # Calculated fields - end
@@ -48,5 +49,9 @@ class RealEstateOffer(models.Model):
     def _compute_deadline_date(self):
         for offer in self:
             offer.deadline_date = date_utils.add(offer.create_date, days=offer.validity)
+
+    def _inverse_deadline_date(self):
+        for offer in self:
+            offer.validity = (offer.deadline_date - offer.create_date).days
 
     # Calculated methods - end
